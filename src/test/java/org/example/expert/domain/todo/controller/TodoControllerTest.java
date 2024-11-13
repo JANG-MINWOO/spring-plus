@@ -35,9 +35,10 @@ class TodoControllerTest {
         // given
         long todoId = 1L;
         String title = "title";
-        AuthUser authUser = new AuthUser(1L, "email", UserRole.USER);
+        String nickname = "nickname";
+        AuthUser authUser = new AuthUser(1L, "email", UserRole.USER, nickname);
         User user = User.fromAuthUser(authUser);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), user.getNickname());
         TodoResponse response = new TodoResponse(
                 todoId,
                 title,
@@ -61,7 +62,7 @@ class TodoControllerTest {
     @Test
     void todo_단건_조회_시_todo가_존재하지_않아_예외가_발생한다() throws Exception {
         // given
-        long todoId = 1L;
+        long todoId = 2L;
 
         // when
         when(todoService.getTodo(todoId))
@@ -69,9 +70,18 @@ class TodoControllerTest {
 
         // then
         mockMvc.perform(get("/todos/{todoId}", todoId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(HttpStatus.OK.name()))
-                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(status().isBadRequest()) // 존재하지 않아 예외가 나는 상황을 가정했기 때문에
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value("Todo not found"));
+                /*
+                  메세지에 의하면 404 NOT_FOUND 의 요청을 반환해야 할 것 같지만 먼저 개발되어 있던 내용의
+                  InvalidRequestException 에 따르면 잘못된 요청을 했다는 400 BAD_REQUEST 로 설정되어 있어서
+                  위와같이 작성함.
+                  Todo not found
+                  라는 메세지의 의도에 맞게 404를 반환하려면 새로운 예외 클래스를 생성한 후 GlobalExceptionHandler 에
+                  추가하고, 관련 메서드의 예외를 던지는 구문에서 생성한 예외를 호출하면 됨.
+
+                  */
     }
 }
