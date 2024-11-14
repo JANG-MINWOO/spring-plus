@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
+import org.example.expert.config.security.UserDetailsImpl;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
@@ -28,7 +29,9 @@ public class TodoService {
     private final WeatherClient weatherClient;
 
     @Transactional //이 메서드는 쓰기 가능 트랜잭션으로 설정
-    public TodoSaveResponse saveTodo(AuthUser authUser, TodoSaveRequest todoSaveRequest) {
+    public TodoSaveResponse saveTodo(UserDetailsImpl loginUser, TodoSaveRequest todoSaveRequest) {
+        AuthUser authUser = new AuthUser(loginUser.getId(), loginUser.getUser().getEmail(), loginUser.getUser()
+            .getUserRole(), loginUser.getUser().getNickname());
         User user = User.fromAuthUser(authUser);
 
         String weather = weatherClient.getTodayWeather();

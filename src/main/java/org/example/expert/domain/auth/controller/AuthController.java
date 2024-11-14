@@ -22,8 +22,5 @@ public class AuthController {
         return authService.signup(signupRequest);
     }
 
-    @PostMapping("/auth/signin")
-    public SigninResponse signin(@Valid @RequestBody SigninRequest signinRequest) {
-        return authService.signin(signinRequest);
-    }
+    //로그인 기능은 Spring Security 의 AuthenticationFilter 에서 진행됨
 }
