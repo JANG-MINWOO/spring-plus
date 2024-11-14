@@ -1,6 +1,8 @@
 package org.example.expert.domain.comment.service;
 
 import lombok.RequiredArgsConstructor;
+
+import org.example.expert.config.security.UserDetailsImpl;
 import org.example.expert.domain.comment.dto.request.CommentSaveRequest;
 import org.example.expert.domain.comment.dto.response.CommentResponse;
 import org.example.expert.domain.comment.dto.response.CommentSaveResponse;
@@ -27,7 +29,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public CommentSaveResponse saveComment(AuthUser authUser, long todoId, CommentSaveRequest commentSaveRequest) {
+    public CommentSaveResponse saveComment(UserDetailsImpl loginUser, long todoId, CommentSaveRequest commentSaveRequest) {
+        AuthUser authUser = new AuthUser(loginUser.getId(), loginUser.getUser().getEmail(), loginUser.getUser()
+            .getUserRole(), loginUser.getUser().getNickname());
         User user = User.fromAuthUser(authUser);
         Todo todo = todoRepository.findById(todoId).orElseThrow(() ->
                 new InvalidRequestException("Todo not found"));
