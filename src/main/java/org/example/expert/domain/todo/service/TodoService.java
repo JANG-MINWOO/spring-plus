@@ -10,6 +10,7 @@ import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSummaryResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -87,5 +88,13 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         );
+    }
+
+    public Page<TodoSummaryResponse> getTodosByKeyword(int page, int size, String titleKeyword, String nicknameKeyword, LocalDateTime startDate, LocalDateTime endDate) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        if(endDate == null){ // 끝나는날을 입력하지 않으면 현재시간을 기본값으로
+            endDate = LocalDateTime.now();
+        }
+        return todoRepository.findTodosByKeywords(titleKeyword, nicknameKeyword, startDate, endDate, pageable);
     }
 }

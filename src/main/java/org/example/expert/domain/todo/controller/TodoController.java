@@ -11,6 +11,7 @@ import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSummaryResponse;
 import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +47,18 @@ public class TodoController {
 	@GetMapping("/todos/{todoId}")
 	public ResponseEntity<TodoResponse> getTodo(@PathVariable long todoId) {
 		return ResponseEntity.ok(todoService.getTodo(todoId));
+	}
+
+	@GetMapping("/todos/keywords")
+	public ResponseEntity<Page<TodoSummaryResponse>> getTodosByKeywords(
+		@RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(required = false) String titleKeyword,
+		@RequestParam(required = false) String nicknameKeyword,
+		@RequestParam(required = false) LocalDateTime startDate,
+		@RequestParam(required = false) LocalDateTime endDate
+	) {
+		return ResponseEntity.ok(
+			todoService.getTodosByKeyword(page, size, titleKeyword, nicknameKeyword, startDate, endDate));
 	}
 }
