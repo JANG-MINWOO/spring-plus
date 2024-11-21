@@ -90,3 +90,13 @@
 - 인덱스 적용 후 조회하는 시간 단축
 
 ![인덱스 적용후 생성 및 조회시간2](https://github.com/user-attachments/assets/b849acb8-eab2-4b4f-8d9d-1aa99cbfb2ed)
+
+## Level 4
+### 도전기능 14번
+14. **Entity 및 Repository CRUD 리팩토링(Kotlin)**
+- 자바로 작성되어 있던 Entity 코틀린 문법으로 리팩토링
+- Nullable 과 Non-nullable 을 구분하여 필드선언
+- 기본생성자와 copy 메서드를 활용한 수정생성자 추가
+- Service 로직 Kotlin 문법으로 변경
+
+- TodoService 에 있는 모든 로직을 변경하지는 못했음
