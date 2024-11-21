@@ -19,7 +19,7 @@
 
 ## Level 2
 ### 필수기능 6~9번
-6.** JPA Cascade**
+6. **JPA Cascade**
 - `PERSIST` 옵션을 지정하여 Todo 가 영속화 될 때, `managers` 도 함께 영속화 되도록 함
 - `REMOVE` 옵션을 지정 하여 삭제될 때 함께 삭제될 수 있도록 함
 
